@@ -1,0 +1,152 @@
+:root {
+  --night: #020611;
+  --navy: #061534;
+  --blue: #1e90ff;
+  --cyan: #4fc3ff;
+  --ice: #e6f1ff;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { background: var(--night); }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  overflow-x: hidden;
+  color: var(--ice);
+  font-family: "JetBrains Mono", ui-monospace, "Courier New", monospace;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 35%, rgba(30, 144, 255, .28), transparent 70%),
+    linear-gradient(180deg, var(--navy) 0%, var(--night) 70%);
+  background-attachment: fixed;
+}
+
+/* Fond : grille « réseau » en perspective qui s'estompe vers le haut */
+.grid {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(rgba(79, 195, 255, .16) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(79, 195, 255, .16) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(ellipse 75% 65% at 50% 50%, #000 15%, transparent 75%);
+          mask-image: radial-gradient(ellipse 75% 65% at 50% 50%, #000 15%, transparent 75%);
+  animation: scan 14s linear infinite;
+}
+
+@keyframes scan {
+  to { background-position: 0 56px, 56px 0; }
+}
+
+/* Halo bleu derrière le logo */
+.glow {
+  position: fixed;
+  left: 50%; top: 38%;
+  width: min(90vmin, 780px);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(30, 144, 255, .45), transparent 65%);
+  filter: blur(40px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Vignette */
+body::after {
+  content: "";
+  position: fixed; inset: 0;
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(0, 0, 0, .75) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.presentation {
+  position: relative;
+  z-index: 2;
+  width: min(88vw, 480px);
+  padding: clamp(1.5rem, 5vh, 3rem) 0;
+  text-align: center;
+}
+
+/* Logo rond, entouré d'un anneau pointillé qui tourne lentement */
+.emblem {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  margin: 0 auto;
+}
+.emblem img {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  box-shadow: 0 0 40px rgba(30, 144, 255, .55), 0 0 110px rgba(30, 144, 255, .35);
+}
+.emblem::before {
+  content: "";
+  position: absolute;
+  inset: -4.5%;
+  border-radius: 50%;
+  border: 2px dashed rgba(79, 195, 255, .55);
+  animation: spin 40s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Texte */
+h1 {
+  margin: clamp(1.8rem, 5vh, 2.6rem) 0 0;
+  font-family: "Orbitron", sans-serif;
+  font-weight: 900;
+  font-size: clamp(2.2rem, 9vw, 3.4rem);
+  line-height: 1.1;
+  letter-spacing: .04em;
+  color: var(--ice);
+  text-shadow: 0 0 10px rgba(79, 195, 255, .8), 0 0 32px rgba(30, 144, 255, .7);
+}
+
+.creator {
+  margin: .8rem 0 0;
+  font-size: clamp(1.05rem, 4vw, 1.3rem);
+  font-weight: 500;
+  color: var(--cyan);
+}
+
+.invite {
+  display: inline-block;
+  margin-top: 1.6rem;
+  padding: .85rem 1.5rem;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  font-size: clamp(.9rem, 3.6vw, 1.05rem);
+  font-weight: 700;
+  color: var(--ice);
+  text-decoration: none;
+  background: rgba(30, 144, 255, .14);
+  border: 1.5px solid var(--blue);
+  border-radius: 10px;
+  box-shadow: 0 0 18px rgba(30, 144, 255, .4), inset 0 0 14px rgba(30, 144, 255, .15);
+  transition: background .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+.invite:hover {
+  background: var(--blue);
+  transform: translateY(-3px);
+  box-shadow: 0 0 34px rgba(30, 144, 255, .85), inset 0 0 14px rgba(255, 255, 255, .15);
+}
+.invite:focus-visible {
+  outline: 3px solid var(--cyan);
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grid, .emblem::before { animation: none; }
+  .invite { transition: none; }
+}
+
